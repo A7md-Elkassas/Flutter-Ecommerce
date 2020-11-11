@@ -32,7 +32,7 @@ class CheckOutSection extends StatelessWidget {
         children: [
           Text.rich(TextSpan(text: 'Total : \n', children: [
             TextSpan(
-              text: '\$${cart.getTotalAmount}',
+              text: '\$${cart.getTotalAmount.toStringAsFixed(2)}',
             ),
           ])),
           SizedBox(
