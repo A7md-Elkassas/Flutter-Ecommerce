@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../shared_component/email_field.dart';
 import '../../shared_component/rounded_button.dart';
@@ -17,7 +18,9 @@ class ForgotPasswordForm extends StatelessWidget {
             EmailField(
               label: 'Email',
               hintTxt: 'Enter Your Email',
-              icon: 'assets/icons/Mail.svg',
+              child: SvgPicture.asset(
+                'assets/icons/Mail.svg',
+              ),
             ),
             const SizedBox(height: 30),
             RoundedButton(

@@ -1,39 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 
 import '../constants.dart';
 
 class EmailField extends StatelessWidget {
   final String label;
   final String hintTxt;
-  final String icon;
+  final Widget child;
+  final Function onSave;
 
-  EmailField({this.label, this.hintTxt, this.icon});
+  EmailField({this.label, this.hintTxt, this.child, this.onSave(String x)});
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      keyboardType: TextInputType.emailAddress,
+      decoration: kTextFieldDecoration.copyWith(
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        hintText: hintTxt,
+        labelText: label,
+        labelStyle: TextStyle(color: Colors.black),
+        prefixIcon: Padding(
+          padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
+          child: child,
+        ),
+      ),
       validator: (value) {
         String errorMsg;
-        if (value.isEmpty) {
-          errorMsg = 'Your Email is Empty';
+        if (value.isEmpty || !value.contains('@')) {
+          errorMsg = 'Invalid Email';
         } else {
           return null;
         }
         return errorMsg;
       },
-      decoration: kTextFieldDecoration.copyWith(
-        floatingLabelBehavior: FloatingLabelBehavior.always,
-        labelText: label,
-        labelStyle: TextStyle(color: Colors.black),
-        hintText: hintTxt,
-        prefixIcon: Padding(
-          padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
-          child: SvgPicture.asset(
-            icon,
-          ),
-        ),
-      ),
+      onSaved: onSave,
     );
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 
 import '../constants.dart';
 
@@ -7,8 +6,22 @@ class PasswordField extends StatefulWidget {
   final String label;
   final String hintTxt;
   final String icon;
+  final TextEditingController passwordController;
+  final Widget child;
+  final Function onSave;
+  final Function onValidate;
+  final bool enable;
 
-  PasswordField({this.label, this.hintTxt, this.icon});
+  PasswordField({
+    this.label,
+    this.hintTxt,
+    this.icon,
+    this.passwordController,
+    this.child,
+    this.onSave(String value),
+    this.onValidate(String value),
+    this.enable,
+  });
 
   @override
   _PasswordFieldState createState() => _PasswordFieldState();
@@ -34,27 +47,19 @@ class _PasswordFieldState extends State<PasswordField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      validator: (value) {
-        if (value.isEmpty) {
-          return errorMsg(widget.hintTxt);
-        } else {
-          return null;
-        }
-      },
-      obscureText:
-          isVisible && widget.hintTxt == 'Enter Your Password' ? true : false,
+      keyboardType: TextInputType.visiblePassword,
+      enabled: widget.enable,
+      controller: widget.passwordController,
       decoration: kTextFieldDecoration.copyWith(
-        floatingLabelBehavior: FloatingLabelBehavior.always,
-        labelText: widget.label,
-        labelStyle: TextStyle(color: Colors.black),
         hintText: widget.hintTxt,
+        labelText: widget.label,
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        labelStyle: TextStyle(color: Colors.black),
         prefixIcon: Padding(
           padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
-          child: SvgPicture.asset(
-            widget.icon,
-          ),
+          child: widget.child,
         ),
-        suffixIcon: isVisible && widget.hintTxt == 'Enter Your Password'
+        suffixIcon: isVisible
             ? IconButton(
                 icon: Icon(Icons.visibility_off),
                 color: Colors.black,
@@ -73,6 +78,9 @@ class _PasswordFieldState extends State<PasswordField> {
                   });
                 }),
       ),
+      obscureText: isVisible ? true : false,
+      validator: widget.onValidate,
+      onSaved: widget.onSave,
     );
   }
 }

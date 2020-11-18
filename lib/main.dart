@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import './constants.dart';
 import './models/cart.dart';
 import './models/products.dart';
 import './routes.dart';
-
-import './constants.dart';
-import './screens/login/login.dart';
+import './screens/Authenticate/authenticate.dart';
 
 void main() {
   runApp(MyApp());
@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
             bodyText2: TextStyle(color: kTextColor),
           ),
         ),
-        initialRoute: LoginScreen.route,
+        initialRoute: AuthenticationScreen.route,
         routes: destinations,
       ),
     );
