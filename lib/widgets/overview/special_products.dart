@@ -1,9 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../models/products.dart';
 
 class SpecialProducts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final category = Provider.of<Products>(context).getCatCount;
+    final product = Provider.of<Products>(context).getCat();
+
     return Column(
       children: [
         Padding(
@@ -27,14 +33,14 @@ class SpecialProducts extends StatelessWidget {
             children: [
               specialCards(
                 context: context,
-                title: 'SmartPhones',
-                brandsNum: 18,
+                title: '${product[0].title}',
+                brandsNum: category,
                 image: 'assets/images/Image Banner 2.png',
                 press: () {},
               ),
               specialCards(
                 context: context,
-                title: 'Fashion',
+                title: '${product[1].title}',
                 image: 'assets/images/Image Banner 3.png',
                 brandsNum: 10,
                 press: () {},

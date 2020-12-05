@@ -4,9 +4,15 @@ import 'package:flutter_svg/svg.dart';
 import '../../constants.dart';
 import '../../models/product.dart';
 
-class ProductInfo extends StatelessWidget {
+class ProductInfo extends StatefulWidget {
   final Product product;
   ProductInfo({this.product});
+
+  @override
+  _ProductInfoState createState() => _ProductInfoState();
+}
+
+class _ProductInfoState extends State<ProductInfo> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -26,7 +32,7 @@ class ProductInfo extends StatelessWidget {
             padding: EdgeInsets.symmetric(
                 horizontal: (20 / 375) * MediaQuery.of(context).size.width),
             child: Text(
-              product.title,
+              widget.product.title,
               style: Theme.of(context).textTheme.headline6,
             ),
           ),
@@ -34,21 +40,30 @@ class ProductInfo extends StatelessWidget {
           // Favorite button
           Align(
             alignment: Alignment.centerRight,
-            child: Container(
-              padding: EdgeInsets.all(
-                  (15 / 375) * MediaQuery.of(context).size.width),
-              decoration: BoxDecoration(
-                color:
-                    product.isFavorite ? Color(0XFFFFE6E6) : Color(0XFFD8DEE4),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(15),
-                  bottomLeft: Radius.circular(15),
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  widget.product.toggleFavorite();
+                });
+              },
+              child: Container(
+                padding: EdgeInsets.all(
+                    (15 / 375) * MediaQuery.of(context).size.width),
+                decoration: BoxDecoration(
+                  color: widget.product.isFavorite
+                      ? Color(0XFFFFE6E6)
+                      : Color(0XFFD8DEE4),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(15),
+                    bottomLeft: Radius.circular(15),
+                  ),
                 ),
-              ),
-              child: SvgPicture.asset(
-                'assets/icons/Heart Icon_2.svg',
-                color:
-                    product.isFavorite ? Color(0XFFFF4848) : Color(0XFFF5F6F9),
+                child: SvgPicture.asset(
+                  'assets/icons/Heart Icon_2.svg',
+                  color: widget.product.isFavorite
+                      ? Color(0XFFFF4848)
+                      : Color(0XFFF5F6F9),
+                ),
               ),
             ),
           ),
@@ -61,7 +76,7 @@ class ProductInfo extends StatelessWidget {
                 left: (20 / 375) * MediaQuery.of(context).size.width,
                 right: (65 / 375) * MediaQuery.of(context).size.width),
             child: Text(
-              product.description,
+              widget.product.description,
               textAlign: TextAlign.justify,
               maxLines: 3,
               style: TextStyle(

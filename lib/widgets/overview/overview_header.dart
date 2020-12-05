@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import '../../screens/cartScreen/cart_screen.dart';
+import 'package:m_shop/screens/cartScreen/cart_screen.dart';
+import 'package:provider/provider.dart';
 
+import './badge.dart';
 import '../../constants.dart';
+import '../../models/cart.dart';
 
 class OverviewHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    final cart = Provider.of<Cart>(context);
+    return Container(
+      height: (46 / 375) * (MediaQuery.of(context).size.height),
       padding: EdgeInsets.symmetric(
           horizontal: (20 / 375) * (MediaQuery.of(context).size.width)),
       child: Row(
@@ -32,41 +37,49 @@ class OverviewHeader extends StatelessWidget {
               ),
             ),
           ),
-          IconBtn(
-            iconSrc: 'assets/icons/Bell.svg',
-            press: () {},
+          Container(
+            width: (50 / 375) * (MediaQuery.of(context).size.width),
+            decoration: BoxDecoration(
+              color: kSecondaryColor.withOpacity(0.2),
+              shape: BoxShape.circle,
+            ),
+            child: Badge(
+              child: Container(
+                height: 31,
+                width: 15,
+                child: GestureDetector(
+                  child: SvgPicture.asset(
+                    'assets/icons/Bell.svg',
+                  ),
+                ),
+              ),
+              value: '0',
+            ),
           ),
-          IconBtn(
-            iconSrc: 'assets/icons/Cart Icon.svg',
-            press: () => Navigator.of(context).pushNamed(CartScreen.route),
+          Container(
+            width: (46 / 375) * (MediaQuery.of(context).size.width),
+            decoration: BoxDecoration(
+              color: kSecondaryColor.withOpacity(0.2),
+              shape: BoxShape.circle,
+            ),
+            child: Badge(
+              child: Container(
+                height: 31,
+                width: 25,
+                padding: EdgeInsets.all(2),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, CartScreen.route);
+                  },
+                  child: SvgPicture.asset(
+                    'assets/icons/Cart Icon.svg',
+                  ),
+                ),
+              ),
+              value: cart.getCartCount.toString(),
+            ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class IconBtn extends StatelessWidget {
-  final String iconSrc;
-  final GestureTapCallback press;
-
-  IconBtn({this.iconSrc, this.press});
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: press,
-      child: Container(
-        padding: EdgeInsets.all(12 / 375) * (MediaQuery.of(context).size.width),
-        width: (46 / 375) * (MediaQuery.of(context).size.width),
-        height: (46 / 375) * (MediaQuery.of(context).size.height),
-        decoration: BoxDecoration(
-          color: kSecondaryColor.withOpacity(0.1),
-          shape: BoxShape.circle,
-        ),
-        child: SvgPicture.asset(
-          iconSrc,
-          width: 20,
-        ),
       ),
     );
   }

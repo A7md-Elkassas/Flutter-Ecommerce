@@ -1,9 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:m_shop/models/categories.dart';
 
 import './product.dart';
 
 class Products with ChangeNotifier {
+  List<Categories> _category = [
+    Categories('1', 'Smartphone'),
+    Categories('2', 'Fantasy'),
+  ];
+
   List<Product> _demoProducts = [
     Product(
       id: 1,
@@ -23,7 +29,6 @@ class Products with ChangeNotifier {
       price: 64.99,
       description: description,
       rating: 4.8,
-      isFavorite: true,
       isPopular: true,
     ),
     Product(
@@ -58,7 +63,6 @@ class Products with ChangeNotifier {
       price: 36.55,
       description: description,
       rating: 4.1,
-      isFavorite: true,
       isPopular: true,
     ),
     Product(
@@ -77,7 +81,6 @@ class Products with ChangeNotifier {
       price: 20.20,
       description: description,
       rating: 4.1,
-      isFavorite: true,
     ),
     Product(
       id: 5,
@@ -94,12 +97,22 @@ class Products with ChangeNotifier {
       price: 20.20,
       description: description,
       rating: 4.1,
-      isFavorite: true,
+      category: [
+        '1',
+      ],
     ),
   ];
 
   List<Product> getItems() {
     return [..._demoProducts];
+  }
+
+  List<Categories> getCat() {
+    return [..._category];
+  }
+
+  Categories findbyCat(String id) {
+    return _category.firstWhere((item) => item.id == id);
   }
 
   Product findById(int id) {
@@ -108,6 +121,10 @@ class Products with ChangeNotifier {
 
   int get getItemsCount {
     return _demoProducts.length;
+  }
+
+  int get getCatCount {
+    return _category.length;
   }
 
   static const String description =
