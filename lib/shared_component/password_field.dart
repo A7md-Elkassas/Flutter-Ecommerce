@@ -18,8 +18,8 @@ class PasswordField extends StatefulWidget {
     this.icon,
     this.passwordController,
     this.child,
-    this.onSave(String value),
-    this.onValidate(String value),
+    this.onSave(var value),
+    this.onValidate(var value),
     this.enable,
   });
 
@@ -28,14 +28,6 @@ class PasswordField extends StatefulWidget {
 }
 
 class _PasswordFieldState extends State<PasswordField> {
-  String errorMsg(String str) {
-    switch (widget.hintTxt) {
-      case 'Enter Your Password':
-        return 'password is empty';
-    }
-    return null;
-  }
-
   bool isVisible = false;
 
   @override

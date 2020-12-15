@@ -121,10 +121,10 @@ class AuthenticateForm extends StatefulWidget {
 }
 
 class _AuthenticateFormState extends State<AuthenticateForm> {
-  final _key = GlobalKey<FormState>();
+  final GlobalKey<FormState> _key = GlobalKey();
 
   bool remember = false;
-  TextEditingController _passwordController = TextEditingController();
+  final _passwordController = TextEditingController();
   bool isVisible = false;
   var _isLoading = false;
   Map<String, String> _authData = {
@@ -137,7 +137,7 @@ class _AuthenticateFormState extends State<AuthenticateForm> {
     super.initState();
   }
 
-  String _errorDialogBox(String msg) {
+  void _errorDialogBox(String msg) {
     showDialog(
         context: context,
         builder: (ctx) => AlertDialog(
@@ -155,41 +155,44 @@ class _AuthenticateFormState extends State<AuthenticateForm> {
   }
 
   Future<void> saveForm() async {
-    if (_key.currentState.validate()) {
-      _key.currentState.save();
-      setState(() {
-        _isLoading = true;
-      });
-      try {
-        if (_authMode == AuthMode.Login) {
-          await Provider.of<Auth>(context, listen: false)
-              .signIn(_authData['email'], _authData['password']);
-        } else {
-          await Provider.of<Auth>(context, listen: false)
-              .signUp(_authData['email'], _authData['password']);
-        }
-      } on HttpException catch (error) {
-        var errorMsg = 'Authentication Failed';
-        if (error.toString().contains('INVALID_PASSWORD')) {
-          errorMsg = 'Your Password is Invalid';
-        } else if (error.toString().contains('EMAIL_NOT_FOUND')) {
-          errorMsg = 'We Couldn\'t find your email';
-        } else if (error.toString().contains('INVALID_EMAIL')) {
-          errorMsg = 'this is not a valid email address.';
-        } else if (error.toString().contains('WEAK_PASSWORD')) {
-          errorMsg = 'this password is very weak.';
-        } else if (error.toString().contains('EMAIL_EXISTS')) {
-          errorMsg = 'This Email is Already in use';
-        }
-        _errorDialogBox(errorMsg);
-      } catch (e) {
-        var errorMessage = 'We Cannot Authenticate You';
-        _errorDialogBox(errorMessage);
-      }
-      setState(() {
-        _isLoading = false;
-      });
+    if (!_key.currentState.validate()) {
+      return;
     }
+    _key.currentState.save();
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      if (_authMode == AuthMode.Login) {
+        await Provider.of<Auth>(context, listen: false)
+            .signIn(_authData['email'], _authData['password']);
+      } else {
+        await Provider.of<Auth>(context, listen: false)
+            .signUp(_authData['email'], _authData['password']);
+      }
+    } on HttpException catch (error) {
+      var errorMessage = 'Authentication Failed.';
+      if (error.toString().contains('EMAIL_EXISTS')) {
+        errorMessage = 'This email address is already in use.';
+      } else if (error.toString().contains('INVALID_EMAIL')) {
+        errorMessage = 'this is not a valid email address.';
+      } else if (error.toString().contains('WEAK_PASSWORD')) {
+        errorMessage = 'this password is very weak.';
+      } else if (error.toString().contains('EMAIL_NOT_FOUND')) {
+        errorMessage = 'we could not find a user with that email .';
+      } else if (error.toString().contains('INVALID_PASSWORD')) {
+        errorMessage = 'Invalid Password.';
+      }
+      _errorDialogBox(errorMessage);
+    } catch (e) {
+      var errorMessage = 'Could Not Authenticate You. Please try again later.';
+      _errorDialogBox(errorMessage);
+      print(e);
+      print(_authData);
+    }
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   @override
@@ -222,10 +225,11 @@ class _AuthenticateFormState extends State<AuthenticateForm> {
                 _authData['password'] = value;
               },
               onValidate: (value) {
+                String errorMsg;
                 if (value.isEmpty || value.length < 5) {
-                  return 'Password is too short!';
+                  errorMsg = 'Password is too short!';
                 }
-                return null;
+                return errorMsg;
               },
             ),
             if (_authMode == AuthMode.SignUp) SizedBox(height: 20),
@@ -292,17 +296,3 @@ class _AuthenticateFormState extends State<AuthenticateForm> {
     );
   }
 }
-
-// class AuthenticateForm extends StatefulWidget {
-//   @override
-//   _AuthenticateFormState createState() => _AuthenticateFormState();
-// }
-//
-// class _AuthenticateFormState extends State<AuthenticateForm> {
-//
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return ;
-//   }
-// }

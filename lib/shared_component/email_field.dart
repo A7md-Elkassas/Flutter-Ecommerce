@@ -8,7 +8,12 @@ class EmailField extends StatelessWidget {
   final Widget child;
   final Function onSave;
 
-  EmailField({this.label, this.hintTxt, this.child, this.onSave(String x)});
+  EmailField({
+    this.label,
+    this.hintTxt,
+    this.child,
+    this.onSave(var x),
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +33,6 @@ class EmailField extends StatelessWidget {
         String errorMsg;
         if (value.isEmpty || !value.contains('@')) {
           errorMsg = 'Invalid Email';
-        } else {
-          return null;
         }
         return errorMsg;
       },
