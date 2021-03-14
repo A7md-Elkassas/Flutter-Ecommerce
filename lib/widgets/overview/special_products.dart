@@ -9,7 +9,7 @@ class SpecialProducts extends StatelessWidget {
   Widget build(BuildContext context) {
     final category = Provider.of<Products>(context).getCatCount;
     final product = Provider.of<Products>(context).getCat();
-
+    final catProd = Provider.of<Products>(context).getItems();
     return Column(
       children: [
         Padding(

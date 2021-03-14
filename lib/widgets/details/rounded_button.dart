@@ -7,7 +7,7 @@ class RoundedButton extends StatelessWidget {
   });
 
   final IconData icon;
-  final GestureTapCallback onPress;
+  final Function onPress;
 
   @override
   Widget build(BuildContext context) {

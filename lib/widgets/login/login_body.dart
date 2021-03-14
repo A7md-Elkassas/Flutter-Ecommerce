@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:m_shop/models/authentication.dart';
+import 'package:m_shop/screens/overviewscreen/overview.dart';
 import 'package:m_shop/shared_component/email_field.dart';
 import 'package:m_shop/shared_component/password_field.dart';
 import 'package:provider/provider.dart';
@@ -166,30 +167,30 @@ class _AuthenticateFormState extends State<AuthenticateForm> {
       if (_authMode == AuthMode.Login) {
         await Provider.of<Auth>(context, listen: false)
             .signIn(_authData['email'], _authData['password']);
+        Navigator.of(context).pushNamed(OverView.route);
       } else {
         await Provider.of<Auth>(context, listen: false)
             .signUp(_authData['email'], _authData['password']);
       }
-    } on HttpException catch (error) {
+    } on HttpException catch (e) {
       var errorMessage = 'Authentication Failed.';
-      if (error.toString().contains('EMAIL_EXISTS')) {
+      if (e.toString().contains('EMAIL_EXISTS')) {
         errorMessage = 'This email address is already in use.';
-      } else if (error.toString().contains('INVALID_EMAIL')) {
+      } else if (e.toString().contains('INVALID_EMAIL')) {
         errorMessage = 'this is not a valid email address.';
-      } else if (error.toString().contains('WEAK_PASSWORD')) {
+      } else if (e.toString().contains('WEAK_PASSWORD')) {
         errorMessage = 'this password is very weak.';
-      } else if (error.toString().contains('EMAIL_NOT_FOUND')) {
+      } else if (e.toString().contains('EMAIL_NOT_FOUND')) {
         errorMessage = 'we could not find a user with that email .';
-      } else if (error.toString().contains('INVALID_PASSWORD')) {
+      } else if (e.toString().contains('INVALID_PASSWORD')) {
         errorMessage = 'Invalid Password.';
       }
       _errorDialogBox(errorMessage);
     } catch (e) {
       var errorMessage = 'Could Not Authenticate You. Please try again later.';
       _errorDialogBox(errorMessage);
-      print(e);
-      print(_authData);
     }
+    print(_authData);
     setState(() {
       _isLoading = false;
     });

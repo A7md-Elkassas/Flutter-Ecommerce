@@ -18,7 +18,7 @@ class DetailsBody extends StatelessWidget {
     final cart = Provider.of<Cart>(context);
     final GlobalKey<ScaffoldState> _scaffoldState =
         new GlobalKey<ScaffoldState>();
-    void snackBarMsg() {
+    snackBarMsg() {
       SnackBar(
         content: Row(
           children: [
@@ -44,11 +44,12 @@ class DetailsBody extends StatelessWidget {
               CartButton(
                 pressCallback: () {
                   Provider.of<Cart>(context, listen: false).addItem(
-                      product.id.toString(),
-                      product.title,
-                      product.price,
-                      product.images.first);
-                  _scaffoldState.currentState.showSnackBar(new SnackBar(
+                    product.id.toString(),
+                    product.title,
+                    product.price,
+                    product.images,
+                  );
+                  _scaffoldState.currentState.showSnackBar(SnackBar(
                     content: Row(
                       children: [
                         Text('Item Added to cart'),

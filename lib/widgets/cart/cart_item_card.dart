@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
@@ -5,7 +6,7 @@ import 'package:provider/provider.dart';
 import '../../constants.dart';
 import '../../models/cart.dart';
 
-class CartItemCard extends StatelessWidget {
+class CartItemCard extends StatefulWidget {
   const CartItemCard({
     @required this.productImage,
     @required this.productTitle,
@@ -23,9 +24,14 @@ class CartItemCard extends StatelessWidget {
   final String id;
 
   @override
+  _CartItemCardState createState() => _CartItemCardState();
+}
+
+class _CartItemCardState extends State<CartItemCard> {
+  @override
   Widget build(BuildContext context) {
     return Dismissible(
-      key: ValueKey(id),
+      key: Key(widget.productId),
       confirmDismiss: (direction) {
         return showDialog(
             context: context,
@@ -55,7 +61,8 @@ class CartItemCard extends StatelessWidget {
       ),
       direction: DismissDirection.endToStart,
       onDismissed: (direction) {
-        Provider.of<Cart>(context, listen: false).removeSingleItem(productId);
+        Provider.of<Cart>(context, listen: debugInstrumentationEnabled)
+            .removeSingleItem(widget.productId);
       },
       child: Container(
         decoration: BoxDecoration(
@@ -74,7 +81,7 @@ class CartItemCard extends StatelessWidget {
                     color: Color(0XFFF5F6F9),
                     borderRadius: BorderRadius.circular(15),
                   ),
-                  child: Image.asset(productImage),
+                  child: Image.network(widget.productImage),
                 ),
               ),
             ),
@@ -85,17 +92,17 @@ class CartItemCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  productTitle,
+                  widget.productTitle,
                   style: TextStyle(color: Colors.black),
                 ),
                 const SizedBox(height: 10),
                 Text.rich(
                   TextSpan(
-                      text: '\$$productPrice',
+                      text: '\$${widget.productPrice}',
                       style: TextStyle(color: kPrimaryColor),
                       children: [
                         TextSpan(
-                          text: ' x$productQuantity',
+                          text: ' x${widget.productQuantity}',
                           style: TextStyle(color: kTextColor),
                         ),
                       ]),

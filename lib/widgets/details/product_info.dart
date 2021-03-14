@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../constants.dart';
-import '../../models/product.dart';
+import '../../models/base_product.dart';
 
 class ProductInfo extends StatefulWidget {
-  final Product product;
+  final BaseProduct product;
   ProductInfo({this.product});
 
   @override
@@ -31,9 +31,17 @@ class _ProductInfoState extends State<ProductInfo> {
           Container(
             padding: EdgeInsets.symmetric(
                 horizontal: (20 / 375) * MediaQuery.of(context).size.width),
-            child: Text(
-              widget.product.title,
-              style: Theme.of(context).textTheme.headline6,
+            child: Row(
+              children: [
+                Text(
+                  'Owner: ',
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+                Text(
+                  widget.product.title,
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+              ],
             ),
           ),
           const SizedBox(height: 5),
